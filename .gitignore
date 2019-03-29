@@ -1,0 +1,9 @@
+# VSCODE
+.vscode/
+
+# Build objexts
+obj/
+blt.exe
+
+# BLT
+blt.log
