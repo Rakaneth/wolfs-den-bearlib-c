@@ -2,12 +2,14 @@
 #include "stdio.h"
 #include "BearLibTerminal.h"
 #include <string.h>
+#include "entity.h"
 
 static Panel *msg_p;
 static Panel *map_p;
 static Panel *stat_p;
 static Panel *info_p;
 static Panel *skills_p;
+static Entity *test_e;
 
 static void handle_alloc_error(const char *name)
 {
@@ -148,6 +150,7 @@ void main_screen_enter(Screen *self)
     stat_p = panel_new(STAT_X, STAT_Y, STAT_W, STAT_H, "Stats");
     info_p = panel_new(INFO_X, INFO_Y, INFO_W, INFO_H, "Info");
     skills_p = panel_new(SKL_X, SKL_Y, SKL_W, SKL_H, "Skills");
+    test_e = entity_new('@', "Player", "The player!");
     base_screen_enter(self);
 }
 
@@ -163,6 +166,7 @@ void main_screen_exit(Screen *self)
     info_p = NULL;
     panel_destroy(stat_p);
     stat_p = NULL;
+    entity_destroy(test_e);
     base_screen_exit(self);
 }
 
@@ -172,12 +176,43 @@ void main_screen_render()
     border(stat_p);
     border(msg_p);
     border(info_p);
-    panel_print(map_p, 0, 0, "The map goes here.");
+    panel_put(map_p, test_e->pos.x, test_e->pos.y, test_e->glyph);
 }
 
 void main_screen_handle(int key)
 {
     //TODO: Main game handler
+    switch (key)
+    {
+    case TK_KP_8:
+    case TK_UP:
+        try_move(test_e, 0, -1);
+        break;
+    case TK_KP_9:
+        try_move(test_e, 1, -1);
+        break;
+    case TK_KP_6:
+    case TK_RIGHT:
+        try_move(test_e, 1, 0);
+        break;
+    case TK_KP_3:
+        try_move(test_e, 1, 1);
+        break;
+    case TK_KP_2:
+    case TK_DOWN:
+        try_move(test_e, 0, 1);
+        break;
+    case TK_KP_1:
+        try_move(test_e, -1, 1);
+        break;
+    case TK_KP_4:
+    case TK_LEFT:
+        try_move(test_e, -1, 0);
+        break;
+    case TK_KP_7:
+        try_move(test_e, -1, -1);
+        break;
+    }
     fprintf(stdout, "Key %d pressed\n", key);
     fflush(stdout);
 }
