@@ -10,6 +10,7 @@ static Panel *stat_p;
 static Panel *info_p;
 static Panel *skills_p;
 static Entity *test_e;
+static Entity *entities[100];
 
 static void handle_alloc_error(const char *name)
 {
@@ -143,15 +144,12 @@ void title_screen_handle(int key)
 void main_screen_enter(Screen *self)
 {
     //TODO: chargen
-    fprintf(stdout, "Character creation should happen here.\n");
-    fflush(stdout);
     msg_p = panel_new(MSG_X, MSG_Y, MSG_W, MSG_H, "Messages");
     map_p = panel_new(MAP_X, MAP_Y, MAP_W, MAP_H, NULL);
     stat_p = panel_new(STAT_X, STAT_Y, STAT_W, STAT_H, "Stats");
     info_p = panel_new(INFO_X, INFO_Y, INFO_W, INFO_H, "Info");
     skills_p = panel_new(SKL_X, SKL_Y, SKL_W, SKL_H, "Skills");
-    test_e = entity_new('@', "Player", "The player!");
-    base_screen_enter(self);
+    test_e = entity_new('@', "Player", "The player!", ENTITY_CREATURE);
 }
 
 void main_screen_exit(Screen *self)
