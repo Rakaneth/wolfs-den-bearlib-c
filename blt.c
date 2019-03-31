@@ -22,5 +22,6 @@ int main()
 
     screen_stack_destroy(screen_stack);
     terminal_close();
+    getchar();
     return 0;
 }

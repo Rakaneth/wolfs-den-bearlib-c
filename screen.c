@@ -3,6 +3,7 @@
 #include "BearLibTerminal.h"
 #include <string.h>
 #include "entity.h"
+#include "gamemap.h"
 
 static Panel *msg_p;
 static Panel *map_p;
@@ -10,7 +11,7 @@ static Panel *stat_p;
 static Panel *info_p;
 static Panel *skills_p;
 static Entity *test_e;
-static Entity *entities[100];
+static GameMap *test_map;
 
 static void handle_alloc_error(const char *name)
 {
@@ -150,6 +151,9 @@ void main_screen_enter(Screen *self)
     info_p = panel_new(INFO_X, INFO_Y, INFO_W, INFO_H, "Info");
     skills_p = panel_new(SKL_X, SKL_Y, SKL_W, SKL_H, "Skills");
     test_e = entity_new('@', "Player", "The player!", ENTITY_CREATURE);
+    test_map = map_new("Test", 100, 100, 1);
+    map_set_tile(test_map, 12, 34, TILE_DOOR_CLOSED);
+    map_debug(test_map);
 }
 
 void main_screen_exit(Screen *self)
@@ -165,6 +169,7 @@ void main_screen_exit(Screen *self)
     panel_destroy(stat_p);
     stat_p = NULL;
     entity_destroy(test_e);
+    map_destroy(test_map);
     base_screen_exit(self);
 }
 
