@@ -138,8 +138,11 @@ void title_screen_render()
 
 void title_screen_handle(int key)
 {
-    screen_stack_pop(screen_stack);
-    screen_stack = screen_stack_new(main_screen_new());
+    if (key != TK_CLOSE)
+    {
+        screen_stack_pop(screen_stack);
+        screen_stack = screen_stack_new(main_screen_new());
+    }
 }
 
 void main_screen_enter(Screen *self)
