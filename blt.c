@@ -1,7 +1,6 @@
 
 #include "BearLibTerminal.h"
 #include <stdio.h>
-#include "random.h"
 #include "screen.h"
 
 int main()
@@ -9,11 +8,7 @@ int main()
     screen_stack = screen_stack_new(title_screen_new());
     int key;
     terminal_open();
-    for (int i = 0; i < 20; i++)
-    {
-        printf("%d\n", get_rand_int(9, 9));
-        fflush(stdout);
-    }
+
     do
     {
         terminal_clear();

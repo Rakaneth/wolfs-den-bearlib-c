@@ -1,4 +1,4 @@
-#include "random.h"
+#include "randomgen.h"
 #include <time.h>
 #include "mathutils.h"
 
