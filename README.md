@@ -13,4 +13,5 @@ toolchain. Right now, I'm using gcc and ming32w-make from MinGW.
 * Hello, BearLibTerminal/C!
 * Screen interface
 * Moving @ demo
+* slightly custom RNG
 

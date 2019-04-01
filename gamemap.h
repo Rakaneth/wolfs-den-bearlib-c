@@ -14,8 +14,8 @@ enum TILE_TYPE
 
 enum TILE_ACCESS
 {
-    TA_WALK = 1 << 1,
-    TA_SEE = 1 << 2
+    TA_WALK = 1 << 0,
+    TA_SEE = 1 << 1
 };
 
 typedef struct gamemap_t
