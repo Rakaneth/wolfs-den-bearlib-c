@@ -12,6 +12,51 @@ static Tile tiles[7] = {
     {"stairs down", TA_WALK | TA_SEE, '>'},
     {"stairs up", TA_WALK | TA_SEE, '<'}};
 
+static unsigned mapgen_index_rotate(unsigned idx)
+{
+    return (4 * idx) % 255;
+}
+
+static int floor_if_has_flag(unsigned flagset, unsigned flag)
+{
+    return (flagset & flag) == flag ? TILE_FLOOR : TILE_WALL;
+}
+
+static void mapgen_set_index(GameMap *m, unsigned idx, int x, int y)
+{
+    static char N = 0x01;
+    static char NE = 0x02;
+    static char E = 0x04;
+    static char SE = 0x08;
+    static char S = 0x10;
+    static char SW = 0x20;
+    static char W = 0x40;
+    static char NW = 0x80;
+
+    if (idx == 0)
+    {
+        for (int xs = -1; xs <= 1; xs++)
+        {
+            for (int ys = -1; ys <= 1; ys++)
+            {
+                map_set_tile(m, x + xs, y + ys, TILE_FLOOR);
+            }
+        }
+    }
+    else
+    {
+        map_set_tile(m, x, y - 1, floor_if_has_flag(idx, N));
+        map_set_tile(m, x + 1, y - 1, floor_if_has_flag(idx, NE));
+        map_set_tile(m, x + 1, y, floor_if_has_flag(idx, E));
+        map_set_tile(m, x + 1, y + 1, floor_if_has_flag(idx, SE));
+        map_set_tile(m, x, y + 1, floor_if_has_flag(idx, S));
+        map_set_tile(m, x - 1, y + 1, floor_if_has_flag(idx, SW));
+        map_set_tile(m, x - 1, y, floor_if_has_flag(idx, W));
+        map_set_tile(m, x - 1, y - 1, floor_if_has_flag(idx, NW));
+        map_set_tile(m, x, y, TILE_FLOOR);
+    }
+}
+
 GameMap *map_new(const char *name, int width, int height, int lit)
 {
     GameMap *new_map;
@@ -34,8 +79,10 @@ GameMap *map_new(const char *name, int width, int height, int lit)
     {
         x = i % width;
         y = i / width;
-        map_set_tile(new_map, x, y, TILE_FLOOR);
+        map_set_tile(new_map, x, y, TILE_NULL);
     }
+
+    mapgen_set_index(new_map, 64, 1, 1);
 
     return new_map;
 }

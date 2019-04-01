@@ -155,8 +155,7 @@ void main_screen_enter(Screen *self)
     skills_p = panel_new(SKL_X, SKL_Y, SKL_W, SKL_H, "Skills");
     test_e = entity_new('@', "Player", "The player!", ENTITY_CREATURE);
     test_map = map_new("Test", 100, 100, 1);
-    map_set_tile(test_map, 12, 34, TILE_DOOR_CLOSED);
-    map_debug(test_map);
+    //map_debug(test_map);
 }
 
 void main_screen_exit(Screen *self)
@@ -178,6 +177,18 @@ void main_screen_exit(Screen *self)
 
 void main_screen_render()
 {
+    //draw map
+    for (int x = 0; x < SCREEN_W; x++)
+    {
+        for (int y = 0; y < SCREEN_H; y++)
+        {
+            Tile t = map_get_tile(test_map, x, y);
+            if (strcmp((const char *)t.name, "null"))
+            {
+                panel_put(map_p, x, y, t.glyph);
+            }
+        }
+    }
     border(skills_p);
     border(stat_p);
     border(msg_p);
