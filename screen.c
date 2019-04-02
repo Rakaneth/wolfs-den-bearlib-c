@@ -4,6 +4,7 @@
 #include <string.h>
 #include "entity.h"
 #include "gamemap.h"
+#include "new.h"
 
 static Panel *msg_p;
 static Panel *map_p;
@@ -88,7 +89,7 @@ static void panel_destroy(Panel *p)
 
 Screen *title_screen_new(void)
 {
-    Screen *s = malloc(sizeof(Screen));
+    Screen *s = NEW(Screen, 1);
     if (!s)
     {
         handle_alloc_error("title");
@@ -103,7 +104,7 @@ Screen *title_screen_new(void)
 
 Screen *main_screen_new(void)
 {
-    Screen *s = malloc(sizeof(Screen));
+    Screen *s = NEW(Screen, 1);
     if (!s)
     {
         handle_alloc_error("title");
@@ -236,7 +237,7 @@ void main_screen_handle(int key)
 
 ScreenNode *screen_stack_new(Screen *s)
 {
-    ScreenNode *sn = malloc(sizeof(ScreenNode));
+    ScreenNode *sn = NEW(ScreenNode, 1);
     sn->next = NULL;
     sn->screen = s;
     s->enter(s);
@@ -279,7 +280,7 @@ void screen_stack_push(Screen *s, ScreenNode *first)
     else
     {
         ScreenNode *top = screen_stack_peek(first);
-        ScreenNode *new_node = malloc(sizeof(ScreenNode));
+        ScreenNode *new_node = NEW(ScreenNode, 1);
         new_node->screen = s;
         new_node->next = NULL;
         top->next = new_node;
@@ -362,7 +363,7 @@ void screen_stack_render(ScreenNode *first)
 
 Panel *panel_new(int x, int y, int w, int h, const char *caption)
 {
-    Panel *new_panel = malloc(sizeof(Panel));
+    Panel *new_panel = NEW(Panel, 1);
     new_panel->x = x;
     new_panel->y = y;
     new_panel->w = w;

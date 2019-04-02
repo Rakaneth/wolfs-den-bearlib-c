@@ -9,12 +9,12 @@ int pt_distance(Point a, Point b)
     return result;
 }
 
-int pt_adj(Point a, Point b)
+bool pt_adj(Point a, Point b)
 {
     return pt_distance(a, b) == 1;
 }
 
-int pt_equal(Point a, Point b)
+bool pt_equal(Point a, Point b)
 {
     return a.x == b.x && a.y == b.y;
 }

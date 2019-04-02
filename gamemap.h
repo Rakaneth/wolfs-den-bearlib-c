@@ -1,5 +1,6 @@
 #pragma once
 #include <stdlib.h>
+#include <stdbool.h>
 
 typedef enum tiletype_e
 {
@@ -36,10 +37,10 @@ typedef struct tile_t
 } Tile;
 
 GameMap *map_new(const char *name, int width, int height, int lit);
-int map_in_bounds(GameMap *m, int x, int y);
+bool map_in_bounds(GameMap *m, int x, int y);
 Tile map_get_tile(GameMap *m, int x, int y);
 void map_set_tile(GameMap *m, int x, int y, int t);
-int map_can_walk(GameMap *m, int x, int y);
-int map_can_see(GameMap *m, int x, int y);
+bool map_can_walk(GameMap *m, int x, int y);
+bool map_can_see(GameMap *m, int x, int y);
 void map_destroy(GameMap *m);
 void map_debug(GameMap *m);

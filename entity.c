@@ -2,12 +2,13 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "new.h"
 
 static unsigned counter = 0;
 
 Entity *entity_new(int glyph, const char *name, const char *desc, int e_type)
 {
-    Entity *new_entity = malloc(sizeof(Entity));
+    Entity *new_entity = NEW(Entity, 1);
     new_entity->name = strdup(name);
     new_entity->desc = strdup(desc);
     new_entity->pos = (Point){0, 0};
@@ -26,6 +27,7 @@ void entity_destroy(Entity *e)
     free(e->desc);
     e->desc = NULL;
     free(e);
+    e = NULL;
 }
 
 void try_move(Entity *e, int dx, int dy)

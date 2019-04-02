@@ -27,21 +27,12 @@ int clamp(int val, int low, int high)
     return result;
 }
 
-int between(int val, int low, int high)
+bool between(int val, int low, int high)
 {
     return clamp(val, low, high) == val;
 }
 
 int abs(int x)
 {
-    int result;
-    if (x < 0)
-    {
-        result = -x;
-    }
-    else
-    {
-        result = x;
-    }
-    return result;
+    return (x < 0) ? -x : x;
 }

@@ -88,7 +88,7 @@ GameMap *map_new(const char *name, int width, int height, int lit)
     return new_map;
 }
 
-int map_in_bounds(GameMap *m, int x, int y)
+bool map_in_bounds(GameMap *m, int x, int y)
 {
     return between(x, 0, m->width - 1) && between(y, 0, m->height - 1);
 }
@@ -117,7 +117,7 @@ void map_set_tile(GameMap *m, int x, int y, int t)
     }
 }
 
-int map_can_walk(GameMap *m, int x, int y)
+bool map_can_walk(GameMap *m, int x, int y)
 {
     Tile t;
 
@@ -125,7 +125,7 @@ int map_can_walk(GameMap *m, int x, int y)
     return (t.access & TA_WALK) == TA_WALK;
 }
 
-int map_can_see(GameMap *m, int x, int y)
+bool map_can_see(GameMap *m, int x, int y)
 {
     Tile t;
 

@@ -7,14 +7,22 @@ static unsigned starting_seed = 0;
 
 static void set_seed()
 {
-    seed = time(0);
-    starting_seed = seed;
+    if (starting_seed == 0)
+    {
+        srand(time(0));
+        starting_seed = rand();
+    }
+
+    if (seed == 0)
+    {
+        seed = starting_seed;
+    }
 }
 
 //Marsaglia's XOR shift
 static void scramble()
 {
-    if (!seed)
+    if (seed == 0 || starting_seed == 0)
     {
         set_seed();
     }
@@ -32,18 +40,18 @@ unsigned get_rand_int(int a, int b)
     return seed % (high - low + 1) + low;
 }
 
-int get_rand_bool()
+bool get_rand_bool()
 {
     scramble();
     return (seed & 1) == 1;
 }
 
-unsigned get_seed()
+unsigned get_rand_seed()
 {
     return starting_seed;
 }
 
-unsigned get_state()
+unsigned get_rand_state()
 {
     return seed;
 }
