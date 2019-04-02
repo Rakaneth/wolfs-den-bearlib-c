@@ -1,6 +1,7 @@
 #include "randomgen.h"
 #include <time.h>
 #include "mathutils.h"
+#include <stdlib.h>
 
 static unsigned seed = 0;
 static unsigned starting_seed = 0;
