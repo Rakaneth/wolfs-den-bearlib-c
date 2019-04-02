@@ -2,6 +2,7 @@
 #include "mathutils.h"
 #include <string.h>
 #include <stdio.h>
+#include "new.h"
 
 static Tile tiles[7] = {
     {"null", 0, 0},
@@ -60,14 +61,14 @@ static void mapgen_set_index(GameMap *m, unsigned idx, int x, int y)
 GameMap *map_new(const char *name, int width, int height, int lit)
 {
     GameMap *new_map;
-    int *new_tiles;
+    TILE_TYPE *new_tiles;
     size_t tiles_length;
     int x;
     int y;
 
     tiles_length = width * height;
-    new_tiles = (int *)calloc(tiles_length, sizeof(int));
-    new_map = (GameMap *)calloc(sizeof(GameMap), 1);
+    new_tiles = NEW(TILE_TYPE, tiles_length);
+    new_map = NEW(GameMap, 1);
 
     new_map->width = width;
     new_map->height = height;

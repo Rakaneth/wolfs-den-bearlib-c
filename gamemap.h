@@ -1,7 +1,7 @@
 #pragma once
 #include <stdlib.h>
 
-enum TILE_TYPE
+typedef enum tiletype_e
 {
     TILE_NULL,
     TILE_FLOOR,
@@ -10,20 +10,20 @@ enum TILE_TYPE
     TILE_DOOR_OPEN,
     TILE_STAIRS_DOWN,
     TILE_STAIRS_UP
-};
+} TILE_TYPE;
 
-enum TILE_ACCESS
+typedef enum tileaccess_e
 {
     TA_WALK = 1 << 0,
     TA_SEE = 1 << 1
-};
+} TILE_ACCESS;
 
 typedef struct gamemap_t
 {
     size_t tiles_length;
     int width;
     int height;
-    int *tiles;
+    TILE_TYPE *tiles;
     int lit;
     char *name;
 } GameMap;
