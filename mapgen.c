@@ -1,7 +1,10 @@
 #include "mapgen.h"
+#include "loadlua.h"
 #include "point.h"
 #include "randomgen.h"
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 typedef struct rect_t {
     int x;
@@ -43,19 +46,28 @@ static Point center(Rect r) {
     return (Point){x, y};
 }
 
-static carve_rect(GameMap* m, Rect r) {
-    for (int xs = r.x; xs <= r.x2; xs++) {
-        for (int ys = r.y; ys <= r.y2; ys++) {
+static void carve_rect(GameMap* m, Rect r) {
+    for (int xs = r.x + 1; xs < r.x2; xs++) {
+        for (int ys = r.y + 1; ys < r.y2; ys++) {
             map_set_tile(m, xs, ys, TILE_FLOOR);
         }
     }
 }
 
-static place_rooms(GameMap* m) {
-    static const int MAX_ROOMS = 50;
+static void all_walls(GameMap* m) {
+    int x, y;
+    for (int i = 0; i < m->tiles_length; i++) {
+        x = i % m->width;
+        y = i / m->width;
+        map_set_tile(m, x, y, TILE_WALL);
+    }
+}
+
+static void place_rooms(GameMap* m) {
+    static const int MAX_ROOMS = 200;
     static const int MIN_SIZE = 5;
     static const int MAX_SIZE = 10;
-    Rect rooms[50];
+    Rect rooms[200];
     Rect new_rect;
     int nb_rooms = 0;
     bool clear;
@@ -92,10 +104,51 @@ static place_rooms(GameMap* m) {
     }
 }
 
-GameMap* generate_dungeon(int width, int height, char* name, bool lit) {
+static GameMap* generate_dungeon(const char* name, int width, int height,
+                                 bool lit) {
     GameMap* new_map;
 
     new_map = map_new(name, width, height, lit);
+    all_walls(new_map);
     place_rooms(new_map);
+    return new_map;
+}
+
+GameMap* generate_map(const char* build_id) {
+    lua_State* L = load_lua_file("lua/maps.lua");
+    int w, h;
+    const char* map_type;
+    const char* map_name;
+    const char* map_color;
+    GameMap* new_map;
+
+    lua_getglobal(L, "mapdata");
+    lua_getfield(L, -1, build_id);
+    w = table_get_int(L, "width");
+    h = table_get_int(L, "height");
+    map_type = table_get_string(L, "type");
+    map_color = table_get_string(L, "wall_color");
+    map_name = table_get_string(L, "name");
+
+    if (map_type == NULL) {
+        map_type = "dungeon";
+    }
+
+    if (map_color == NULL) {
+        map_color = "127,101,95";
+    }
+
+    if (map_name == NULL) {
+        map_name = "No map name";
+    }
+
+    if (strcmp(map_type, "dungeon") == 0) {
+        new_map = generate_dungeon(map_name, w, h, true);
+    } else {
+        fprintf(stderr, "Dungeon type %s is not yet implemented", map_type);
+        fflush(stderr);
+        exit(1);
+    }
+
     return new_map;
 }

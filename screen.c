@@ -135,7 +135,7 @@ void main_screen_enter(Screen* self) {
     info_p = panel_new(INFO_X, INFO_Y, INFO_W, INFO_H, "Info");
     skills_p = panel_new(SKL_X, SKL_Y, SKL_W, SKL_H, "Skills");
     test_e = entity_new('@', "Player", "The player!", ENTITY_CREATURE);
-    test_map = generate_dungeon(100, 100, "Test", true);
+    test_map = generate_map("mine");
     // map_debug(test_map);
 }
 
@@ -162,8 +162,13 @@ static Point screen_point(Point p) {
     return new_p;
 }
 
+// Screen scrolls on reaching the bottom of the screen
 static Point cam(Point p) {
     Point new_p;
+
+    /* abusing integer division to get clean rounding to the nearest multiple of
+     * the map dimensions */
+
     new_p.x = MAP_W * (p.x / MAP_W);
     new_p.y = MAP_H * (p.y / MAP_H);
     return new_p;
