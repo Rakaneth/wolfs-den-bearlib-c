@@ -27,8 +27,8 @@ Point pt_translate(Point pt, int dx, int dy) {
 }
 
 Point pt_move_direction(Point pt, DIRECTION d) {
-    int offset[2];
-    offset[0] = DIRS[d][0];
-    offset[1] = DIRS[d][1];
-    return pt_translate(pt, offset[0], offset[1]);
+    int dx, dy;
+    dx = DIRS[d][0];
+    dy = DIRS[d][1];
+    return pt_translate(pt, dx, dy);
 }

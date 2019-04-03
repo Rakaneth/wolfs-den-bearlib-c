@@ -12,7 +12,9 @@ static Tile tiles[7] = {{"null", 0, 0},
                         {"stairs down", TA_WALK | TA_SEE, '>'},
                         {"stairs up", TA_WALK | TA_SEE, '<'}};
 
-static unsigned mapgen_index_rotate(unsigned idx) { return (4 * idx) % 255; }
+static unsigned mapgen_index_rotate(unsigned idx) {
+    return (4 * idx) % 255;
+}
 
 static int floor_if_has_flag(unsigned flagset, unsigned flag) {
     return (flagset & flag) == flag ? TILE_FLOOR : TILE_WALL;
@@ -127,4 +129,19 @@ void map_debug(GameMap* m) {
         }
         putchar('\n');
     }
+}
+
+unsigned char map_adj(GameMap* m, Point p) {
+    Point cur;
+    unsigned char result = 0;
+    Tile t;
+
+    for (int i = 0; i < 8; i++) {
+        cur = pt_move_direction(p, i);
+        t = map_get_tile(m, cur.x, cur.y);
+        if (strcmp("floor", t.name) == 0) {
+            result |= (1 << i);
+        }
+    }
+    return result;
 }

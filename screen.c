@@ -180,15 +180,65 @@ static Point cam(Point p) {
 
 static void render_map() {
     Point c = cam(test_e->pos);
-    Point screen_p, ps_p;
+    Point screen_p, ps_p, map_pt;
     Tile t;
+    unsigned char neis;
+    int to_put;
+
+    static const int WALL_UL = 0xE03C;
+    static const int WALL_UR = 0xE03E;
+    static const int WALL_LL = 0xE064;
+    static const int WALL_LR = 0xE066;
+    static const int FLOOR = 0xE541;
+    static const int WALL_HORZ = 0xE03D;
+    static const int WALL_VERT = 0xE050;
+    const char* tiles = terminal_get("ini.options.graphics-mode", "ascii");
 
     for (int x = c.x; x < c.x + MAP_W; x++) {
         for (int y = c.y; y < c.y + MAP_H; y++) {
             t = map_get_tile(test_map, x, y);
-            if (strcmp(t.name, "null") != 0) {
-                screen_p = screen_point((Point){x, y});
-                panel_put(map_p, screen_p.x, screen_p.y, t.glyph,
+            map_pt = (Point){x, y};
+            neis = map_adj(test_map, map_pt);
+            if (strcmp(t.name, "null") != 0 && neis > 0) {
+                screen_p = screen_point(map_pt);
+                if (strcmp(tiles, "tiles") == 0) {
+                    switch (neis) {
+                    case 8:
+                        to_put = WALL_UL;
+                        break;
+                    case 32:
+                        to_put = WALL_UR;
+                        break;
+                    case 2:
+                        to_put = WALL_LL;
+                        break;
+                    case 128:
+                        to_put = WALL_LR;
+                        break;
+                    case 24:
+                    case 48:
+                    case 3:
+                    case 129:
+                    case 0x83:
+                    case 0x38:
+                        to_put = WALL_HORZ;
+                        break;
+                    case 6:
+                    case 12:
+                    case 0x60:
+                    case 0xC0:
+                    case 14:
+                    case 0xE0:
+                        to_put = WALL_VERT;
+                        break;
+                    default:
+                        to_put = t.glyph;
+                    }
+                } else {
+                    to_put = t.glyph;
+                }
+
+                panel_put(map_p, screen_p.x, screen_p.y, to_put,
                           test_map->wall_color);
             }
         }

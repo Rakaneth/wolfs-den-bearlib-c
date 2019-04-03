@@ -1,4 +1,5 @@
 #pragma once
+#include "point.h"
 #include <stdbool.h>
 #include <stdlib.h>
 
@@ -39,3 +40,4 @@ bool map_can_walk(GameMap* m, int x, int y);
 bool map_can_see(GameMap* m, int x, int y);
 void map_destroy(GameMap* m);
 void map_debug(GameMap* m);
+unsigned char map_adj(GameMap* m, Point p);
