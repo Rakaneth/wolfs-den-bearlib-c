@@ -6,7 +6,7 @@ NamespaceIndentation: All
 PointerAlignment: Left
 UseTab: Never
 BreakBeforeBraces: Attach
-AllowShortFunctionsOnASingleLine: true
+AllowShortFunctionsOnASingleLine: false
 ConstructorInitializerAllOnOneLineOrOnePerLine: true
 ConstructorInitializerIndentWidth: 4
 TabWidth: 4

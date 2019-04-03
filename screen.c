@@ -178,8 +178,7 @@ static Point cam(Point p) {
     return new_p;
 }
 
-void main_screen_render() {
-    // draw map
+static void render_map() {
     Point c = cam(test_e->pos);
     Point screen_p, ps_p;
     Tile t;
@@ -194,12 +193,37 @@ void main_screen_render() {
             }
         }
     }
-    border(skills_p);
-    border(stat_p);
-    border(msg_p);
-    border(info_p);
+
     ps_p = screen_point(test_e->pos);
     panel_put(map_p, ps_p.x, ps_p.y, test_e->glyph, test_e->color);
+}
+
+static void render_skills() {
+    border(skills_p);
+}
+
+static void render_stats() {
+    char buf[50];
+    border(stat_p);
+    panel_print(stat_p, 1, 1, test_e->name);
+    sprintf(buf, "(%d, %d) - %s", test_e->pos.x, test_e->pos.y, test_map->name);
+    panel_print(stat_p, 1, 2, buf);
+}
+
+static void render_msgs() {
+    border(msg_p);
+}
+
+static void render_info() {
+    border(info_p);
+}
+
+void main_screen_render() {
+    render_map();
+    render_skills();
+    render_stats();
+    render_msgs();
+    render_info();
 }
 
 void main_screen_handle(int key) {
