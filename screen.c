@@ -231,31 +231,31 @@ void main_screen_handle(int key) {
     switch (key) {
     case TK_KP_8:
     case TK_UP:
-        try_move(test_e, 0, -1);
+        entity_try_move(test_e, DIR_N);
         break;
     case TK_KP_9:
-        try_move(test_e, 1, -1);
+        entity_try_move(test_e, DIR_NE);
         break;
     case TK_KP_6:
     case TK_RIGHT:
-        try_move(test_e, 1, 0);
+        entity_try_move(test_e, DIR_E);
         break;
     case TK_KP_3:
-        try_move(test_e, 1, 1);
+        entity_try_move(test_e, DIR_SE);
         break;
     case TK_KP_2:
     case TK_DOWN:
-        try_move(test_e, 0, 1);
+        entity_try_move(test_e, DIR_S);
         break;
     case TK_KP_1:
-        try_move(test_e, -1, 1);
+        entity_try_move(test_e, DIR_SW);
         break;
     case TK_KP_4:
     case TK_LEFT:
-        try_move(test_e, -1, 0);
+        entity_try_move(test_e, DIR_W);
         break;
     case TK_KP_7:
-        try_move(test_e, -1, -1);
+        entity_try_move(test_e, DIR_NW);
         break;
     }
     fprintf(stdout, "Key %d pressed\n", key);

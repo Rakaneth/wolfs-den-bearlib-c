@@ -30,9 +30,8 @@ void entity_destroy(Entity* e) {
     e = NULL;
 }
 
-void try_move(Entity* e, int dx, int dy) {
-    e->pos.x += dx;
-    e->pos.y += dy;
+void entity_try_move(Entity* e, DIRECTION d) {
+    e->pos = pt_move_direction(e->pos, d);
 }
 
 void entity_debug(Entity* e) {
