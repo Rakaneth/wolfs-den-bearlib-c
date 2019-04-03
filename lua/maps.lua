@@ -2,7 +2,7 @@ mapdata = {
     mine = {
         width = 85,
         height = 85,
-        wall_color = "127,101,95",
+        wall_color = "sepia",
         type = "dungeon",
         name = "Mines"
     }

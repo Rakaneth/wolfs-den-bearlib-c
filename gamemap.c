@@ -47,7 +47,8 @@ static void mapgen_set_index(GameMap* m, unsigned idx, int x, int y) {
     }
 }
 
-GameMap* map_new(const char* name, int width, int height, int lit) {
+GameMap* map_new(const char* name, int width, int height,
+                 const char* wall_color, bool lit) {
     GameMap* new_map;
     TILE_TYPE* new_tiles;
     size_t tiles_length;
@@ -63,6 +64,7 @@ GameMap* map_new(const char* name, int width, int height, int lit) {
     new_map->lit = lit;
     new_map->tiles = new_tiles;
     new_map->name = strdup(name);
+    new_map->wall_color = strdup(wall_color);
     new_map->tiles_length = tiles_length;
     for (int i = 0; i < new_tiles; i++) {
         x = i % width;
@@ -114,6 +116,7 @@ void map_destroy(GameMap* m) {
     fflush(stdout);
     free(m->tiles);
     free(m->name);
+    free(m->wall_color);
     free(m);
 }
 

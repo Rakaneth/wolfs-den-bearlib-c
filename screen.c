@@ -34,8 +34,12 @@ static dimensions_t panel_print(Panel* panel, int x, int y, const char* text) {
     return terminal_print(x + panel->x, y + panel->y, text);
 }
 
-void panel_put(Panel* panel, int x, int y, int code) {
+static void panel_put(Panel* panel, int x, int y, int code, const char* color) {
+    if (color != NULL) {
+        terminal_color(color_from_name(color));
+    }
     terminal_put(x + panel->x, y + panel->y, code);
+    terminal_color(color_from_name("white"));
 }
 
 static void border(Panel* panel) {
@@ -49,19 +53,19 @@ static void border(Panel* panel) {
     int y2 = panel->h - 1;
 
     for (int xs = 1; xs < x2; xs++) {
-        panel_put(panel, xs, 0, HORZ);
-        panel_put(panel, xs, y2, HORZ);
+        panel_put(panel, xs, 0, HORZ, NULL);
+        panel_put(panel, xs, y2, HORZ, NULL);
     }
 
     for (int ys = 1; ys < y2; ys++) {
-        panel_put(panel, 0, ys, VERT);
-        panel_put(panel, x2, ys, VERT);
+        panel_put(panel, 0, ys, VERT, NULL);
+        panel_put(panel, x2, ys, VERT, NULL);
     }
 
-    panel_put(panel, 0, 0, UL);
-    panel_put(panel, x2, 0, UR);
-    panel_put(panel, 0, y2, LL);
-    panel_put(panel, x2, y2, LR);
+    panel_put(panel, 0, 0, UL, NULL);
+    panel_put(panel, x2, 0, UR, NULL);
+    panel_put(panel, 0, y2, LL, NULL);
+    panel_put(panel, x2, y2, LR, NULL);
 
     if (panel->caption != NULL) {
         panel_print(panel, 1, 0, panel->caption);
@@ -185,7 +189,8 @@ void main_screen_render() {
             t = map_get_tile(test_map, x, y);
             if (strcmp(t.name, "null") != 0) {
                 screen_p = screen_point((Point){x, y});
-                panel_put(map_p, screen_p.x, screen_p.y, t.glyph);
+                panel_put(map_p, screen_p.x, screen_p.y, t.glyph,
+                          test_map->wall_color);
             }
         }
     }
@@ -194,7 +199,7 @@ void main_screen_render() {
     border(msg_p);
     border(info_p);
     ps_p = screen_point(test_e->pos);
-    panel_put(map_p, ps_p.x, ps_p.y, test_e->glyph);
+    panel_put(map_p, ps_p.x, ps_p.y, test_e->glyph, test_e->color);
 }
 
 void main_screen_handle(int key) {

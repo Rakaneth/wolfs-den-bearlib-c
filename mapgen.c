@@ -105,10 +105,10 @@ static void place_rooms(GameMap* m) {
 }
 
 static GameMap* generate_dungeon(const char* name, int width, int height,
-                                 bool lit) {
+                                 const char* wall_color, bool lit) {
     GameMap* new_map;
 
-    new_map = map_new(name, width, height, lit);
+    new_map = map_new(name, width, height, wall_color, lit);
     all_walls(new_map);
     place_rooms(new_map);
     return new_map;
@@ -123,7 +123,9 @@ GameMap* generate_map(const char* build_id) {
     GameMap* new_map;
 
     lua_getglobal(L, "mapdata");
-    lua_getfield(L, -1, build_id);
+    lua_pushstring(L, "mine");
+    dump_stack(L);
+    lua_gettable(L, -2);
     w = table_get_int(L, "width");
     h = table_get_int(L, "height");
     map_type = table_get_string(L, "type");
@@ -143,7 +145,7 @@ GameMap* generate_map(const char* build_id) {
     }
 
     if (strcmp(map_type, "dungeon") == 0) {
-        new_map = generate_dungeon(map_name, w, h, true);
+        new_map = generate_dungeon(map_name, w, h, map_color, true);
     } else {
         fprintf(stderr, "Dungeon type %s is not yet implemented", map_type);
         fflush(stderr);
