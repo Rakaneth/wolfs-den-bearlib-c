@@ -63,12 +63,14 @@ GameMap* map_new(const char* name, int width, int height,
 
     new_map->width = width;
     new_map->height = height;
+    new_map->right_edge = width - 1;
+    new_map->bot_edge = height - 1;
     new_map->lit = lit;
     new_map->tiles = new_tiles;
     new_map->name = strdup(name);
     new_map->wall_color = strdup(wall_color);
     new_map->tiles_length = tiles_length;
-    for (int i = 0; i < new_tiles; i++) {
+    for (int i = 0; i < tiles_length; i++) {
         x = i % width;
         y = i / width;
         map_set_tile(new_map, x, y, TILE_NULL);

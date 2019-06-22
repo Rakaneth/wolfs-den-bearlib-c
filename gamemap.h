@@ -19,6 +19,8 @@ typedef struct gamemap_t {
     size_t tiles_length;
     int width;
     int height;
+    int right_edge;
+    int bot_edge;
     TILE_TYPE* tiles;
     bool lit;
     char* name;

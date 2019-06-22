@@ -63,6 +63,18 @@ static void all_walls(GameMap* m) {
     }
 }
 
+static void wall_edges(GameMap* m) {
+    for (int x = 0; x < m->width; x++) {
+        map_set_tile(m, x, 0, TILE_WALL);
+        map_set_tile(m, x, m->bot_edge, TILE_WALL);
+    }
+
+    for (int y = 0; y < m->height; y++) {
+        map_set_tile(m, 0, y, TILE_WALL);
+        map_set_tile(m, m->right_edge, y, TILE_WALL);
+    }
+}
+
 static void place_rooms(GameMap* m) {
     static const int MAX_ROOMS = 200;
     static const int MIN_SIZE = 5;
@@ -102,6 +114,42 @@ static void place_rooms(GameMap* m) {
 
         fflush(stdout);
     }
+}
+
+typedef struct digger_t {
+    Point pos;
+    int duration;
+    DIRECTION dir;
+} Digger;
+
+static GameMap* generate_digger(const char* name, int width, int height,
+                                const char* wall_color, bool lit) {
+    GameMap* new_map;
+    Digger d;
+    unsigned int turn_check;
+
+    new_map = map_new(name, width, height, wall_color, lit);
+    all_walls(new_map);
+
+    d.pos.x = get_rand_int(1, new_map->width - 1);
+    d.pos.y = get_rand_int(1, new_map->height - 1);
+    d.duration = get_rand_int(2, 20);
+    d.dir = get_rand_int(0, 3) * 2;
+
+    while (d.pos.x < new_map->right_edge && d.pos.y < new_map->bot_edge &&
+           d.duration > 0) {
+        map_set_tile(new_map, d.pos.x, d.pos.y, TILE_FLOOR);
+        d.pos = pt_move_direction(d.pos, d.dir);
+        turn_check = get_rand_int(0, 99);
+        if (turn_check < 20) {
+            d.dir = get_rand_int(0, 3) * 2;
+        }
+        d.duration--;
+    }
+
+    wall_edges(new_map);
+
+    return new_map;
 }
 
 static GameMap* generate_dungeon(const char* name, int width, int height,
@@ -146,6 +194,8 @@ GameMap* generate_map(const char* build_id) {
 
     if (strcmp(map_type, "dungeon") == 0) {
         new_map = generate_dungeon(map_name, w, h, map_color, true);
+    } else if (strcmp(map_type, "digger") == 0) {
+        new_map = generate_digger(map_name, w, h, map_color, true);
     } else {
         fprintf(stderr, "Dungeon type %s is not yet implemented", map_type);
         fflush(stderr);

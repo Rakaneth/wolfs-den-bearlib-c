@@ -3,7 +3,7 @@ mapdata = {
         width = 85,
         height = 85,
         wall_color = "stone",
-        type = "dungeon",
+        type = "digger",
         name = "Mines (Upper)",
         down = "lower-mines",
         up = "world=map"
