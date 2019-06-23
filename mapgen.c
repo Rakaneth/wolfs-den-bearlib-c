@@ -122,30 +122,30 @@ typedef struct digger_t {
     DIRECTION dir;
 } Digger;
 
+static void digger_carve(GameMap* m, Digger d) {
+    while (map_in_interior(m, d.pos.x, d.pos.y) && d.duration > 0) {
+        map_set_tile(m, d.pos.x, d.pos.y, TILE_FLOOR);
+        d.pos = pt_move_direction(d.pos, d.dir);
+        d.duration--;
+    }
+}
+
 static GameMap* generate_digger(const char* name, int width, int height,
                                 const char* wall_color, bool lit) {
     GameMap* new_map;
     Digger d;
     unsigned int turn_check;
+    int num_tiles = 0;
+    int max_tiles;
 
     new_map = map_new(name, width, height, wall_color, lit);
     all_walls(new_map);
+    max_tiles = new_map->tiles_length / 5;
 
-    d.pos.x = get_rand_int(1, new_map->width - 1);
-    d.pos.y = get_rand_int(1, new_map->height - 1);
+    d.pos.x = get_rand_int(1, new_map->right_edge);
+    d.pos.y = get_rand_int(1, new_map->bot_edge);
     d.duration = get_rand_int(2, 20);
     d.dir = get_rand_int(0, 3) * 2;
-
-    while (d.pos.x < new_map->right_edge && d.pos.y < new_map->bot_edge &&
-           d.duration > 0) {
-        map_set_tile(new_map, d.pos.x, d.pos.y, TILE_FLOOR);
-        d.pos = pt_move_direction(d.pos, d.dir);
-        turn_check = get_rand_int(0, 99);
-        if (turn_check < 20) {
-            d.dir = get_rand_int(0, 3) * 2;
-        }
-        d.duration--;
-    }
 
     wall_edges(new_map);
 

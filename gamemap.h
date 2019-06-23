@@ -40,6 +40,7 @@ Tile map_get_tile(GameMap* m, int x, int y);
 void map_set_tile(GameMap* m, int x, int y, int t);
 bool map_can_walk(GameMap* m, int x, int y);
 bool map_can_see(GameMap* m, int x, int y);
+bool map_in_interior(GameMap* m, int x, int y);
 void map_destroy(GameMap* m);
 void map_debug(GameMap* m);
 unsigned char map_adj(GameMap* m, Point p);

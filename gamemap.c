@@ -115,6 +115,10 @@ bool map_can_see(GameMap* m, int x, int y) {
     return (t.access & TA_SEE) == TA_SEE;
 }
 
+bool map_in_interior(GameMap* m, int x, int y) {
+    return between(x, 1, m->right_edge) && between(y, 1, m->bot_edge);
+}
+
 void map_destroy(GameMap* m) {
     printf("Destroying %s\n", m->name);
     fflush(stdout);
