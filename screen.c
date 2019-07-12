@@ -307,6 +307,9 @@ void main_screen_handle(int key) {
     case TK_KP_7:
         entity_try_move(test_e, DIR_NW);
         break;
+    case TK_S:
+        map_debug(test_map);
+        break;
     }
     fprintf(stdout, "Key %d pressed\n", key);
     fflush(stdout);

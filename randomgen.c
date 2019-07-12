@@ -1,30 +1,25 @@
 #include "randomgen.h"
-#include <time.h>
 #include "mathutils.h"
 #include <stdlib.h>
+#include <time.h>
 
 static unsigned seed = 0;
-static unsigned starting_seed = 0;
+static unsigned starting_seed = 0xDEADBEEF;
 
-static void set_seed()
-{
-    if (starting_seed == 0)
-    {
+static void set_seed() {
+    if (starting_seed == 0) {
         srand(time(0));
         starting_seed = rand();
     }
 
-    if (seed == 0)
-    {
+    if (seed == 0) {
         seed = starting_seed;
     }
 }
 
-//Marsaglia's XOR shift
-static void scramble()
-{
-    if (seed == 0 || starting_seed == 0)
-    {
+// Marsaglia's XOR shift
+static void scramble() {
+    if (seed == 0 || starting_seed == 0) {
         set_seed();
     }
     seed ^= seed << 13;
@@ -32,8 +27,7 @@ static void scramble()
     seed ^= seed << 5;
 }
 
-unsigned get_rand_int(int a, int b)
-{
+unsigned get_rand_int(int a, int b) {
     int high, low;
     high = max(a, b);
     low = min(a, b);
@@ -41,18 +35,15 @@ unsigned get_rand_int(int a, int b)
     return seed % (high - low + 1) + low;
 }
 
-bool get_rand_bool()
-{
+bool get_rand_bool() {
     scramble();
     return (seed & 1) == 1;
 }
 
-unsigned get_rand_seed()
-{
+unsigned get_rand_seed() {
     return starting_seed;
 }
 
-unsigned get_rand_state()
-{
+unsigned get_rand_state() {
     return seed;
 }
