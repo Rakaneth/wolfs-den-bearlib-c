@@ -52,21 +52,18 @@ static void mapgen_set_index(GameMap* m, unsigned idx, int x, int y) {
 GameMap* map_new(const char* name, int width, int height,
                  const char* wall_color, bool lit) {
     GameMap* new_map;
-    TILE_TYPE* new_tiles;
     size_t tiles_length;
     int x;
     int y;
 
     tiles_length = width * height;
-    new_tiles = NEW(TILE_TYPE, tiles_length);
-    new_map = NEW(GameMap, 1);
+    new_map = malloc(sizeof(GameMap) + tiles_length * sizeof(TILE_TYPE));
 
     new_map->width = width;
     new_map->height = height;
     new_map->right_edge = width - 1;
     new_map->bot_edge = height - 1;
     new_map->lit = lit;
-    new_map->tiles = new_tiles;
     new_map->name = strdup(name);
     new_map->wall_color = strdup(wall_color);
     new_map->tiles_length = tiles_length;

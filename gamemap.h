@@ -21,10 +21,10 @@ typedef struct gamemap_t {
     int height;
     int right_edge;
     int bot_edge;
-    TILE_TYPE* tiles;
     bool lit;
     char* name;
     char* wall_color;
+    TILE_TYPE tiles[];
 } GameMap;
 
 typedef struct tile_t {
